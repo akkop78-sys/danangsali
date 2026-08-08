@@ -5,30 +5,21 @@
 ## 1. GitHub에 코드 올리기
 
 1. https://github.com 가입
-2. 새 저장소 만들기 (예: `danangsali`)
-3. 이 폴더에서 Git으로 push (아래 명령, 저장소 주소만 본인 것으로)
+이미 코드가 올라가 있습니다: https://github.com/akkop78-sys/danangsali
 
-```bash
-git init
-git add .
-git commit -m "Deploy danangsali shop"
-git branch -M main
-git remote add origin https://github.com/본인아이디/danangsali.git
-git push -u origin main
-```
+## 2. Render에 연결 (지금 할 일)
 
-## 2. Render에 연결
+1. 브라우저에서 열기: https://render.com/deploy?repo=https://github.com/akkop78-sys/danangsali  
+   (또는 https://render.com 가입 후 GitHub로 로그인)
+2. GitHub 권한을 허용합니다.
+3. **Apply** / **Create** 를 누릅니다. (Free 플랜)
+4. 5~10분 정도 빌드를 기다립니다.
+5. 초록색 Live가 되면 `https://danangsali-xxxx.onrender.com` 같은 주소가 생깁니다.
 
-1. https://render.com 가입 (GitHub 로그인 추천)
-2. **New +** → **Web Service**
-3. GitHub 저장소 `danangsali` 연결
-4. 설정:
-   - **Runtime**: Python
-   - **Build Command**: `pip install -r requirements.txt`
-   - **Start Command**: `gunicorn shop:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120`
-5. **Create Web Service**
-
-또는 저장소에 있는 `render.yaml`로 **New + → Blueprint** 배포도 가능합니다.
+수동으로 만들 때 설정값:
+- **Runtime**: Python
+- **Build Command**: `pip install -r requirements.txt`
+- **Start Command**: `gunicorn shop:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120`
 
 ## 3. 환경변수 (권장)
 
