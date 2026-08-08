@@ -1,0 +1,31 @@
+{% extends "admin/base_admin.html" %}
+
+{% block title %}고객 문의 — {{ shop_name }}{% endblock %}
+
+{% block content %}
+<div class="section-head">
+  <h2>고객 문의</h2>
+  <p>고객센터 양식으로 들어온 문의입니다. 확인 후 전화·카톡·메일로 답해 주세요.</p>
+</div>
+
+{% if inquiries %}
+  {% for item in inquiries %}
+    <article class="order-block {% if not item.is_read %}is-new{% endif %}">
+      <div class="order-head">
+        <h3>{{ item.name }} {% if not item.is_read %}<span class="status-pill">새 문의</span>{% endif %}</h3>
+        <span class="muted">{{ item.created_at.strftime('%Y-%m-%d %H:%M') }}</span>
+      </div>
+      <p>{{ item.phone or '-' }} / {{ item.email or '-' }}</p>
+      {% if item.order_ref %}<p>주문번호 참고: {{ item.order_ref }}</p>{% endif %}
+      <p class="inquiry-msg">{{ item.message }}</p>
+      {% if not item.is_read %}
+        <form method="post" action="{{ url_for('admin.inquiry_read', inquiry_id=item.id) }}">
+          <button class="btn btn-secondary" type="submit">확인 완료</button>
+        </form>
+      {% endif %}
+    </article>
+  {% endfor %}
+{% else %}
+  <p class="empty">아직 문의가 없어요.</p>
+{% endif %}
+{% endblock %}

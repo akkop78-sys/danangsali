@@ -46,8 +46,12 @@
     <input type="text" name="sizes" value="{{ product.sizes if product else 'S,M,L' }}" placeholder="S,M,L,XL 또는 FREE" />
   </label>
   <label>
-    상품 설명
+    상품 설명 (짧은 소개)
     <textarea name="description" rows="4">{{ product.description if product else '' }}</textarea>
+  </label>
+  <label>
+    상세 설명 HTML (상세페이지 연출)
+    <textarea name="detail_html" rows="10" placeholder="구성, 특징, 세탁법 등">{{ product.detail_html if product else '' }}</textarea>
   </label>
   <label>
     이미지 URL (인터넷 주소)

@@ -14,10 +14,59 @@ from flask import (
 
 from admin_routes import admin_bp
 from config import Config
-from models import CATEGORIES, Order, OrderItem, Product, User, db
+from models import CATEGORIES, Inquiry, Order, OrderItem, Product, User, db
+from notify import notify_new_inquiry, notify_new_order
 from payments import create_payment
 from reviews import FEATURED_REVIEWS, QUICK_QUOTES
 from seed import seed_database
+
+
+def _sms_href(phone: str) -> str:
+    """화면에 번호 노출 없이 문자 앱만 열 링크. (번호는 HTML 속성에만 사용)"""
+    digits = "".join(ch for ch in (phone or "") if ch.isdigit())
+    if not digits:
+        return ""
+    # 한국 휴대폰 010… → 국제형 +82
+    if digits.startswith("0"):
+        digits = "82" + digits[1:]
+    body = "다낭살이 문의드립니다."
+    from urllib.parse import quote
+
+    return f"sms:+{digits}?&body={quote(body)}"
+
+
+def _mailto_href(email: str) -> str:
+    """화면에 주소 노출 없이 메일 앱만 열 링크."""
+    addr = (email or "").strip()
+    if "@" not in addr:
+        return ""
+    from urllib.parse import quote
+
+    subject = quote("다낭살이 문의")
+    body = quote("다낭살이 문의드립니다.\n\n주문번호:\n내용:\n")
+    return f"mailto:{addr}?subject={subject}&body={body}"
+
+
+def _public_kakao(kakao: str) -> str:
+    """이메일을 카톡 ID로 쓴 경우 화면에 노출하지 않음."""
+    value = (kakao or "").strip()
+    if not value or "@" in value:
+        return ""
+    return value
+
+
+def _ensure_product_columns() -> None:
+    """Add newly introduced columns on existing SQLite DBs."""
+    try:
+        rows = db.session.execute(db.text("PRAGMA table_info(products)")).fetchall()
+    except Exception:
+        return
+    cols = {row[1] for row in rows}
+    if "detail_html" not in cols:
+        db.session.execute(
+            db.text("ALTER TABLE products ADD COLUMN detail_html TEXT DEFAULT ''")
+        )
+        db.session.commit()
 
 
 def create_app() -> Flask:
@@ -41,6 +90,21 @@ def create_app() -> Flask:
             "categories": CATEGORIES,
             "current_user": user,
             "payment_mode": app.config.get("PAYMENT_MODE", "demo"),
+            # 문자·메일은 중간 경로로만 연결해 페이지에 주소/번호를 남기지 않음
+            "shop_sms_enabled": bool(_sms_href(app.config.get("SHOP_PHONE", ""))),
+            "shop_mail_enabled": bool(_mailto_href(app.config.get("SHOP_EMAIL", ""))),
+            # 카톡 ID가 이메일이면 화면에 그대로 찍지 않음
+            "shop_kakao_public": _public_kakao(app.config.get("SHOP_KAKAO", "")),
+            "shop_hours": app.config.get("SHOP_HOURS", ""),
+            "bank_name": app.config.get("SHOP_BANK_NAME", ""),
+            "bank_account": app.config.get("SHOP_BANK_ACCOUNT", ""),
+            "bank_holder": app.config.get("SHOP_BANK_HOLDER", ""),
+            "bank_note": app.config.get("SHOP_BANK_NOTE", ""),
+            "bank_ready": bool(
+                app.config.get("SHOP_BANK_NAME")
+                and app.config.get("SHOP_BANK_ACCOUNT")
+                and app.config.get("SHOP_BANK_HOLDER")
+            ),
         }
 
     def login_required(view):
@@ -296,6 +360,7 @@ def create_app() -> Flask:
 
             db.session.commit()
             session.pop("cart", None)
+            notify_new_order(order)
             flash(payment.message, "success")
             return render_template("order_done.html", order=order)
 
@@ -321,8 +386,55 @@ def create_app() -> Flask:
         )
         return render_template("orders.html", orders=orders)
 
+    @app.route("/contact", methods=["GET", "POST"])
+    def contact():
+        if request.method == "POST":
+            name = request.form.get("name", "").strip()
+            phone = request.form.get("phone", "").strip()
+            email = request.form.get("email", "").strip()
+            order_ref = request.form.get("order_ref", "").strip()
+            message = request.form.get("message", "").strip()
+            if not name or not message:
+                flash("이름과 문의 내용을 입력해 주세요.", "error")
+            elif not phone and not email:
+                flash("전화 또는 이메일 중 하나는 남겨 주세요.", "error")
+            else:
+                inquiry = Inquiry(
+                    name=name,
+                    phone=phone,
+                    email=email,
+                    order_ref=order_ref,
+                    message=message,
+                )
+                db.session.add(inquiry)
+                db.session.commit()
+                notify_new_inquiry(inquiry)
+                flash(
+                    "문의가 접수됐어요. 확인 후 연락드릴게요.",
+                    "success",
+                )
+                return redirect(url_for("contact"))
+        return render_template("contact.html")
+
+    @app.route("/contact/sms")
+    def contact_sms():
+        href = _sms_href(app.config.get("SHOP_PHONE", ""))
+        if not href:
+            flash("문자 문의가 아직 준비되지 않았어요.", "error")
+            return redirect(url_for("contact"))
+        return redirect(href)
+
+    @app.route("/contact/email")
+    def contact_email():
+        href = _mailto_href(app.config.get("SHOP_EMAIL", ""))
+        if not href:
+            flash("이메일 문의가 아직 준비되지 않았어요.", "error")
+            return redirect(url_for("contact"))
+        return redirect(href)
+
     with app.app_context():
         db.create_all()
+        _ensure_product_columns()
         seed_database(
             admin_username=app.config["ADMIN_USERNAME"],
             admin_password=app.config["ADMIN_PASSWORD"],

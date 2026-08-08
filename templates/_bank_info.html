@@ -1,0 +1,12 @@
+{# 무통장 입금 계좌 안내 #}
+<div class="bank-box">
+  <p class="bank-label">입금 계좌 (무통장)</p>
+  {% if bank_ready %}
+    <p class="bank-line"><span>은행</span><strong>{{ bank_name }}</strong></p>
+    <p class="bank-line"><span>계좌</span><strong class="bank-account">{{ bank_account }}</strong></p>
+    <p class="bank-line"><span>예금주</span><strong>{{ bank_holder }}</strong></p>
+    {% if bank_note %}<p class="bank-note">{{ bank_note }}</p>{% endif %}
+  {% else %}
+    <p class="bank-note">입금 계좌 등록 준비 중입니다. 주문 후 고객센터로 문의해 주세요.</p>
+  {% endif %}
+</div>

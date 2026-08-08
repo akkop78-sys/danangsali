@@ -19,7 +19,7 @@ from flask import (
 from werkzeug.utils import secure_filename
 
 from export import products_to_coupang_csv, products_to_naver_csv
-from models import CATEGORIES, ORDER_STATUSES, Order, Product, User, db
+from models import CATEGORIES, ORDER_STATUSES, Inquiry, Order, Product, User, db
 
 admin_bp = Blueprint("admin", __name__, url_prefix="/admin")
 
@@ -99,6 +99,7 @@ def _product_from_form(product: Product | None = None) -> Product:
     product.category = request.form.get("category", "상의").strip() or "상의"
     product.color = request.form.get("color", "").strip()
     product.description = request.form.get("description", "").strip()
+    product.detail_html = request.form.get("detail_html", "").strip()
     sizes = request.form.get("sizes", "FREE").strip() or "FREE"
     product.sizes = ",".join(s.strip() for s in sizes.replace("/", ",").split(",") if s.strip())
     product.channel_note = request.form.get("channel_note", "").strip()
@@ -151,6 +152,8 @@ def dashboard():
     products = Product.query.order_by(Product.id.desc()).all()
     orders = Order.query.order_by(Order.created_at.desc()).limit(8).all()
     low_stock = Product.query.filter(Product.stock <= 5, Product.is_active.is_(True)).count()
+    pending_orders = Order.query.filter_by(status="접수").count()
+    unread_inquiries = Inquiry.query.filter_by(is_read=False).count()
     return render_template(
         "admin/dashboard.html",
         products=products,
@@ -158,6 +161,9 @@ def dashboard():
         product_count=len(products),
         order_count=Order.query.count(),
         low_stock=low_stock,
+        pending_orders=pending_orders,
+        unread_inquiries=unread_inquiries,
+        ntfy_topic=current_app.config.get("NTFY_TOPIC", ""),
     )
 
 
@@ -223,6 +229,23 @@ def product_delete(product_id: int):
 def orders():
     items = Order.query.order_by(Order.created_at.desc()).all()
     return render_template("admin/orders.html", orders=items, statuses=ORDER_STATUSES)
+
+
+@admin_bp.route("/inquiries")
+@admin_required
+def inquiries():
+    items = Inquiry.query.order_by(Inquiry.created_at.desc()).all()
+    return render_template("admin/inquiries.html", inquiries=items)
+
+
+@admin_bp.route("/inquiries/<int:inquiry_id>/read", methods=["POST"])
+@admin_required
+def inquiry_read(inquiry_id: int):
+    inquiry = Inquiry.query.get_or_404(inquiry_id)
+    inquiry.is_read = True
+    db.session.commit()
+    flash("문의를 확인 처리했어요.", "success")
+    return redirect(url_for("admin.inquiries"))
 
 
 @admin_bp.route("/orders/<int:order_id>/status", methods=["POST"])

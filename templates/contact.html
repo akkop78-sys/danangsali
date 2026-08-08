@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}고객센터 — {{ shop_name }}{% endblock %}
+
+{% block content %}
+<section class="contact-page">
+  <div class="section-head">
+    <p class="eyebrow">고객센터</p>
+    <h1>문의 · 교환 · 배송 안내</h1>
+    <p>상품 이상, 배송 일정, 사이즈 문의는 아래로 남겨 주세요. 확인 후 연락드립니다.</p>
+  </div>
+
+  <div class="contact-grid">
+    <div class="contact-channels">
+      <h2>바로 연락</h2>
+      <ul class="contact-list">
+        <li>
+          <strong>카카오톡</strong>
+          {% if shop_kakao_public %}
+            <span>{{ shop_kakao_public }}</span>
+          {% else %}
+            <span class="muted">주소는 공개하지 않습니다. 아래 문의에 카톡 ID를 남겨 주시면 톡으로 답장드려요.</span>
+          {% endif %}
+        </li>
+        {% if shop_sms_enabled %}
+          <li>
+            <strong>문자 문의</strong>
+            <span class="muted">전화번호는 공개하지 않습니다. 문자로만 주고받을 수 있어요.</span>
+            <a class="btn btn-secondary sms-btn" href="{{ url_for('contact_sms') }}">문자 보내기</a>
+          </li>
+        {% endif %}
+        {% if shop_mail_enabled %}
+          <li>
+            <strong>이메일 문의</strong>
+            <span class="muted">이메일 주소는 공개하지 않습니다. 메일 앱으로만 보낼 수 있어요.</span>
+            <a class="btn btn-secondary sms-btn" href="{{ url_for('contact_email') }}">이메일 보내기</a>
+          </li>
+        {% endif %}
+      </ul>
+      {% if shop_hours %}
+        <p class="contact-hours">운영 시간: {{ shop_hours }}</p>
+      {% endif %}
+      <p class="muted">주문 후 포장·발송은 관리자가 주문 목록을 보고 진행합니다. 급하시면 문의에 주문번호를 적어 주세요.</p>
+    </div>
+
+    <form class="contact-form checkout-form" method="post">
+      <h2>문의 남기기</h2>
+      <label>
+        이름 *
+        <input type="text" name="name" required value="{{ current_user.name if current_user else '' }}" />
+      </label>
+      <label>
+        회신받을 연락처 (전화 또는 카톡)
+        <input type="text" name="phone" placeholder="답장 받을 번호·카톡 ID" />
+      </label>
+      <label>
+        회신받을 이메일 (선택)
+        <input type="email" name="email" placeholder="답장 받을 이메일" value="" />
+      </label>
+      <label>
+        주문번호 (있으면)
+        <input type="text" name="order_ref" placeholder="예: 12" />
+      </label>
+      <label>
+        문의 내용 *
+        <textarea name="message" rows="6" required placeholder="상품 이상, 배송 문의 등을 적어 주세요."></textarea>
+      </label>
+      <button class="btn btn-primary" type="submit">문의 보내기</button>
+    </form>
+  </div>
+</section>
+{% endblock %}

@@ -8,7 +8,7 @@
     <img src="{{ product_image(product) }}" alt="{{ product.name }}" />
   </div>
   <div class="detail-info reveal delay-1">
-    <p class="product-cat">{{ product.category }} · {{ product.color }}</p>
+    <p class="product-cat">다낭팬티 · {{ product.category }} · {{ product.color }}</p>
     <h1>{{ product.name }}</h1>
     <p class="detail-price">{{ product.price | krw }}</p>
     <p class="detail-desc">{{ product.description }}</p>
@@ -36,10 +36,22 @@
     <ul class="detail-trust">
       <li>베트남 주재원 10년+, 직접 써 보고 만족한 상품만 골랐어요.</li>
       <li>현지에서 상태 확인 후 포장·발송합니다. (일정은 주문 후 안내)</li>
-      <li>사이즈가 고민되면 문의로 말씀해 주세요.</li>
+      <li>사이즈·상품 이상 문의는 <a href="{{ url_for('contact') }}">고객센터</a>로 남겨 주세요.</li>
     </ul>
   </div>
 </section>
+
+{% if product.detail_html %}
+<section class="product-story reveal delay-2">
+  <div class="section-head">
+    <p class="eyebrow">상세 안내</p>
+    <h2>다낭살이에서 이렇게 보내드려요</h2>
+  </div>
+  <div class="story-body">
+    {{ product.detail_html | safe }}
+  </div>
+</section>
+{% endif %}
 
 {% if related %}
 <section class="related">

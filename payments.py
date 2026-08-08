@@ -23,7 +23,20 @@ def create_payment(
     client_key: str,
     payment_mode: str = "demo",
 ) -> PaymentResult:
-    """결제 세션 생성. demo면 바로 통과, toss면 키 확인만 합니다."""
+    """결제 세션 생성. bank/demo면 바로 통과, toss면 키 확인만 합니다."""
+    if payment_mode == "bank":
+        return PaymentResult(
+            ok=True,
+            mode="bank",
+            message="주문이 접수되었습니다. 안내에 따라 계좌로 입금해 주세요.",
+            data={
+                "amount": amount,
+                "order_id": order_id,
+                "order_name": order_name,
+                "customer_name": customer_name,
+            },
+        )
+
     if payment_mode != "toss":
         return PaymentResult(
             ok=True,

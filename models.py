@@ -41,6 +41,7 @@ class Product(db.Model):
     category = db.Column(db.String(40), nullable=False)
     color = db.Column(db.String(40), default="")
     description = db.Column(db.Text, default="")
+    detail_html = db.Column(db.Text, default="")  # 상세페이지 연출용 HTML
     sizes = db.Column(db.String(120), default="FREE")  # comma-separated
     image_url = db.Column(db.String(500), default="")
     image_path = db.Column(db.String(255), default="")  # relative under static/
@@ -93,3 +94,18 @@ class OrderItem(db.Model):
     @property
     def line_total(self) -> int:
         return self.unit_price * self.qty
+
+
+class Inquiry(db.Model):
+    """고객센터 문의 (상품 이상·배송 문의 등)."""
+
+    __tablename__ = "inquiries"
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), nullable=False)
+    phone = db.Column(db.String(40), default="")
+    email = db.Column(db.String(120), default="")
+    order_ref = db.Column(db.String(40), default="")  # 주문번호 참고용
+    message = db.Column(db.Text, nullable=False)
+    is_read = db.Column(db.Boolean, default=False, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)

@@ -6,13 +6,7 @@
 <section class="checkout-page">
   <div class="section-head">
     <h2>주문하기</h2>
-    <p>
-      {% if payment_mode == 'demo' %}
-        현재는 <strong>연습 주문</strong>입니다. 실제 카드 결제는 되지 않아요. (토스페이먼츠 연동 준비됨)
-      {% else %}
-        결제 모드: 토스페이먼츠
-      {% endif %}
-    </p>
+    <p>주문 접수 후 <strong>무통장 입금</strong>으로 결제해 주세요. 입금 확인 뒤 발송합니다.</p>
   </div>
 
   <div class="checkout-grid">
@@ -29,7 +23,7 @@
         배송지
         <textarea name="address" rows="3" required placeholder="주소를 입력해 주세요"></textarea>
       </label>
-      <button class="btn btn-primary" type="submit">연습 주문 완료하기</button>
+      <button class="btn btn-primary" type="submit">주문하기 (무통장입금)</button>
     </form>
 
     <aside class="order-aside">
@@ -43,6 +37,7 @@
         {% endfor %}
       </ul>
       <p class="aside-total">합계 <strong>{{ total | krw }}</strong></p>
+      {% include "_bank_info.html" %}
     </aside>
   </div>
 </section>

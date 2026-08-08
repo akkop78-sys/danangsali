@@ -10,8 +10,10 @@
   window.addEventListener("scroll", onScroll, { passive: true });
   onScroll();
 
+  // 콘텐츠가 안 보이는 문제를 막기 위해 기본 표시
+  reveals.forEach((el) => el.classList.add("is-visible"));
+
   if (!("IntersectionObserver" in window)) {
-    reveals.forEach((el) => el.classList.add("is-visible"));
     return;
   }
 
@@ -24,7 +26,7 @@
         }
       });
     },
-    { threshold: 0.15, rootMargin: "0px 0px -40px 0px" }
+    { threshold: 0.05, rootMargin: "0px 0px 0px 0px" }
   );
 
   reveals.forEach((el) => io.observe(el));

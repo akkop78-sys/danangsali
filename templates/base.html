@@ -19,6 +19,8 @@
       <a href="{{ url_for('index') }}#seller">판매자</a>
       <a href="{{ url_for('index') }}#reviews">후기</a>
       <a href="{{ url_for('index') }}#collection">다낭팬티</a>
+      <a href="{{ url_for('index') }}#payment">입금계좌</a>
+      <a href="{{ url_for('contact') }}">고객센터</a>
       <a href="{{ url_for('cart') }}" class="cart-link">
         장바구니
         {% if cart_count %}<span class="cart-badge">{{ cart_count }}</span>{% endif %}
@@ -54,6 +56,11 @@
     <p class="footer-brand">{{ shop_name }}</p>
     <p class="footer-note">베트남 주재원 10년+ · 만족한 상품만 저렴하게</p>
     <p class="footer-sub">다낭팬티 후기 모음 · 현지 검수 후 발송 · 연습 주문 가능</p>
+    <p class="footer-contact">
+      <a href="{{ url_for('contact') }}">고객센터</a>
+      {% if shop_kakao_public %} · 카톡 {{ shop_kakao_public }}{% endif %}
+      · <a href="{{ url_for('contact') }}">문자·이메일 문의</a>
+    </p>
   </footer>
 
   <script src="{{ url_for('static', filename='js/main.js') }}"></script>

@@ -29,6 +29,20 @@
 | `ADMIN_USERNAME` | `admin` |
 | `ADMIN_PASSWORD` | 본인만 아는 비밀번호 |
 | `PAYMENT_MODE` | `demo` |
+| `SHOP_PHONE` | 문자 문의용 번호 (화면에 노출 안 함, sms 링크만) |
+| `SHOP_KAKAO` | 카카오톡 ID 또는 오픈채팅 안내 |
+| `SHOP_EMAIL` | 이메일 문의용 (화면에 주소 노출 안 함, mailto 링크만) |
+| `ADMIN_NOTIFY_EMAIL` | 주문·문의 알림 받을 이메일 |
+| `DISCORD_WEBHOOK_URL` | (선택) 디스코드 웹훅 |
+| `NTFY_TOPIC` | 폰 푸시 주제 (기본 `danangsali-akkop78-orders`) — [ntfy 앱](https://ntfy.sh)에서 구독 |
+| `MAIL_SERVER` 등 | (선택) 지메일 SMTP로 메일 알림. 없으면 메일은 안 감 |
+
+### 주문 알림 받는 법 (추천)
+
+1. 휴대폰에 **ntfy** 앱 설치 (앱스토어/플레이스토어)
+2. 앱에서 **Subscribe to topic** → `danangsali-akkop78-orders` 입력
+3. 이후 주문이 들어오면 폰으로 알림이 옵니다
+4. 주문 내용·주소는 관리자 로그인 → **주문** 메뉴에서도 항상 볼 수 있습니다
 
 ## 4. 접속
 
