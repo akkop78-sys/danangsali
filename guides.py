@@ -1,5 +1,7 @@
 """다낭팬티·속옷 검색 유입용 가이드 콘텐츠."""
 
+from __future__ import annotations
+
 GUIDES = [
     {
         "slug": "danang-panty-guide",
