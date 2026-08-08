@@ -243,21 +243,43 @@ def ops():
 @admin_required
 def marketing():
     site = "https://danangsali.onrender.com"
+    photos = [
+        {
+            "file": "marketing/01-jewel-panty.jpg",
+            "label": "사진1 보석팬티",
+            "hint": "글 맨 위",
+        },
+        {
+            "file": "marketing/02-jiller-panty.jpg",
+            "label": "사진2 질러팬티",
+            "hint": "중간",
+        },
+        {
+            "file": "marketing/03-han-market.jpg",
+            "label": "사진3 한시장 실물",
+            "hint": "링크 앞",
+        },
+    ]
     posts = [
         {
-            "channel": "네이버 블로그",
+            "channel": "네이버 블로그 (사진 포함)",
             "title": "다낭팬티 후기 | 한시장 보석팬티·질러팬티 시세와 구매팁",
             "body": (
                 "다낭 한시장에서 제일 많이 사는 속옷, 일명 다낭팬티!\n"
-                "보석팬티랑 질러팬티가 대표인데요.\n\n"
+                "앞쪽에 큐빅이 들어간 보석팬티가 대표예요.\n\n"
+                "(여기 사진1 보석팬티 넣기)\n\n"
+                "또 하나는 질러팬티. 안 입은 듯한 심리스라 데일리로 많이 찾습니다.\n\n"
+                "(여기 사진2 질러팬티 넣기)\n\n"
                 "여행 중에 사기 귀찮거나, 더 사고 싶은데 짐이 부담이라면\n"
                 "주재원이 현지에서 검수해서 보내는 다낭살이로 주문해 보세요.\n\n"
+                "(여기 사진3 한시장 실물 넣기)\n\n"
                 f"▶ 쇼핑몰: {site}\n"
                 f"▶ 가이드: {site}/guides/danang-panty-guide\n"
+                f"▶ 보석 vs 질러: {site}/guides/jewel-vs-jiller\n"
                 "▶ 결제: 무통장 입금 (입금 확인 후 발송)\n\n"
                 "저는 베트남에서 10년 넘게 일하면서 직접 써 보고\n"
-                "만족한 것만 골라 세트로 보내 드리고 있어요.\n"
-                "후기·시세·세탁법은 가이드에 정리해 두었습니다."
+                "만족한 것만 골라 10개 세트로 보내 드리고 있어요.\n"
+                "입금 계좌·문의는 사이트 고객센터를 이용해 주세요."
             ),
         },
         {
@@ -265,6 +287,7 @@ def marketing():
             "title": "다낭 한시장 팬티 대신 한국에서 시키는 법",
             "body": (
                 "다낭 한시장 팬티(보석/질러) 찾으시는 분 공유해요.\n"
+                "(사진 1~2장 넣으면 더 좋아요)\n\n"
                 "현지 시세는 장당 대략 2~3만동대라고 하시는데,\n"
                 "여행 없이 세트(10장)로 받아보고 싶으시면 아래 참고!\n\n"
                 f"{site}\n"
@@ -284,7 +307,7 @@ def marketing():
             ),
         },
     ]
-    return render_template("admin/marketing.html", posts=posts)
+    return render_template("admin/marketing.html", posts=posts, photos=photos)
 
 
 @admin_bp.route("/inquiries")

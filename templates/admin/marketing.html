@@ -5,7 +5,7 @@
 {% block content %}
 <div class="section-head">
   <h2>마케팅 복붙 문구</h2>
-  <p>네이버 계정은 직접 로그인하셔야 해서, 글은 여기 다 준비해 두었습니다. <strong>복사 → 네이버에 붙여넣기</strong>만 하시면 됩니다.</p>
+  <p>글 + 사진까지 준비해 두었습니다. 사진 3장 받은 뒤 네이버 글쓰기에 순서대로 넣으면 됩니다.</p>
 </div>
 
 <p class="admin-hint">
@@ -15,19 +15,34 @@
   <a href="https://section.cafe.naver.com/" target="_blank" rel="noopener">네이버 카페 열기</a>
 </p>
 
-<p>
-  텍스트 파일 다운로드:
-  <a href="{{ url_for('static', filename='marketing/blog-danang-panty.txt') }}" download>블로그글.txt</a>
-  ·
-  <a href="{{ url_for('static', filename='marketing/cafe-danang-panty.txt') }}" download>카페글.txt</a>
-  ·
-  <a href="{{ url_for('static', filename='marketing/short-sns.txt') }}" download>짧은문구.txt</a>
-</p>
+<section class="order-block">
+  <h3>1) 블로그용 사진 다운로드 (3장)</h3>
+  <p class="muted">각 사진을 눌러 저장한 뒤, 네이버 글쓰기에서 사진 버튼을 눌러 넣으세요.</p>
+  <div class="marketing-photos">
+    {% for photo in photos %}
+      <figure>
+        <a href="{{ url_for('static', filename=photo.file) }}" download target="_blank" rel="noopener">
+          <img src="{{ url_for('static', filename=photo.file) }}" alt="{{ photo.label }}" />
+        </a>
+        <figcaption>
+          <strong>{{ photo.label }}</strong><br />
+          <a href="{{ url_for('static', filename=photo.file) }}" download>다운로드</a>
+          · {{ photo.hint }}
+        </figcaption>
+      </figure>
+    {% endfor %}
+  </div>
+  <ol class="ops-list">
+    <li><strong>사진1</strong> 보석팬티 → 글 맨 위</li>
+    <li><strong>사진2</strong> 질러팬티 → 중간</li>
+    <li><strong>사진3</strong> 한시장 실물 → 쇼핑몰 링크 앞</li>
+  </ol>
+</section>
 
 {% for post in posts %}
   <article class="order-block">
-    <h3>{{ post.title }}</h3>
-    <p class="muted">추천 채널: {{ post.channel }}</p>
+    <h3>{{ loop.index + 1 }}) {{ post.channel }}</h3>
+    <p class="muted">{{ post.title }}</p>
     <label>
       제목
       <input type="text" id="title-{{ loop.index }}" readonly value="{{ post.title }}" />
@@ -35,7 +50,7 @@
     <button class="btn btn-secondary" type="button" data-copy="title-{{ loop.index }}">제목 복사</button>
     <label>
       본문
-      <textarea id="body-{{ loop.index }}" rows="12" readonly>{{ post.body }}</textarea>
+      <textarea id="body-{{ loop.index }}" rows="14" readonly>{{ post.body }}</textarea>
     </label>
     <button class="btn btn-primary" type="button" data-copy="body-{{ loop.index }}">본문 복사</button>
   </article>
@@ -49,10 +64,9 @@ document.querySelectorAll("[data-copy]").forEach((btn) => {
     const text = el.value || el.textContent || "";
     try {
       await navigator.clipboard.writeText(text);
+      const original = btn.textContent;
       btn.textContent = "복사됨!";
-      setTimeout(() => {
-        btn.textContent = btn.getAttribute("data-copy").startsWith("title") ? "제목 복사" : "본문 복사";
-      }, 1200);
+      setTimeout(() => { btn.textContent = original; }, 1200);
     } catch (e) {
       el.focus();
       el.select();

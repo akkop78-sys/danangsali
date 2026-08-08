@@ -797,6 +797,38 @@ img {
   font-size: 0.9rem;
 }
 
+.marketing-photos {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.marketing-photos figure {
+  margin: 0;
+}
+
+.marketing-photos img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  display: block;
+  background: var(--mist);
+}
+
+.marketing-photos figcaption {
+  margin-top: 0.45rem;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  line-height: 1.45;
+}
+
+@media (max-width: 860px) {
+  .marketing-photos {
+    grid-template-columns: 1fr;
+  }
+}
+
 .ops-list {
   margin: 1.5rem 0;
   padding-left: 1.25rem;
