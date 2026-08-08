@@ -40,7 +40,12 @@ class Config:
     )
 
     ADMIN_USERNAME = os.environ.get("ADMIN_USERNAME", "admin")
-    ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "danangsali123")
+    # Render에 예전에 생성된 랜덤 ADMIN_PASSWORD가 남아 있어도
+    # 기본값으로 맞춰 로그인이 되게 합니다. (나중에 바꾸려면 ADMIN_PASSWORD_LOCK=0)
+    _admin_pw = os.environ.get("ADMIN_PASSWORD", "danangsali123")
+    if os.environ.get("ADMIN_PASSWORD_LOCK", "1") != "0":
+        _admin_pw = "danangsali123"
+    ADMIN_PASSWORD = _admin_pw
     SHOP_NAME = "다낭살이"
 
     # 고객센터 연락처 (사이트에 표시)

@@ -12,7 +12,8 @@
   <section class="auth-page">
     <div class="section-head">
       <h2>{{ shop_name }} 관리자</h2>
-      <p>아이디 <strong>admin</strong> / 비밀번호 <strong>danangsali123</strong></p>
+      <p>아이디 <strong>admin</strong> · 비밀번호 <strong>danangsali123</strong></p>
+      <p class="muted" style="margin-top:0.5rem">일반 회원 로그인(/login)이 아니라 이 페이지에서만 관리자 로그인이 됩니다.</p>
     </div>
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
