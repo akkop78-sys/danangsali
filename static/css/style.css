@@ -789,6 +789,31 @@ img {
   background: color-mix(in srgb, var(--sea, #2f6f6a) 12%, white);
 }
 
+.admin-hint {
+  margin: 0.5rem 0 0.85rem;
+  padding: 0.65rem 0.8rem;
+  background: color-mix(in srgb, var(--sea, #2f6f6a) 10%, white);
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
+.ops-list {
+  margin: 1.5rem 0;
+  padding-left: 1.25rem;
+  display: grid;
+  gap: 1.1rem;
+}
+
+.ops-list li strong {
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.ops-list p {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
 .admin-alert p {
   margin: 0.25rem 0;
 }

@@ -7,7 +7,16 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 db = SQLAlchemy()
 
-ORDER_STATUSES = ("접수", "배송준비", "배송중", "완료", "취소")
+# 무통장 흐름: 입금대기 → 입금확인 → 배송준비 → 배송중 → 완료
+ORDER_STATUSES = (
+    "입금대기",
+    "입금확인",
+    "배송준비",
+    "배송중",
+    "완료",
+    "취소",
+    "접수",  # 이전 주문 호환
+)
 CATEGORIES = ["전체", "세트"]
 
 

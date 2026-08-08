@@ -393,7 +393,7 @@ def create_app() -> Flask:
                 buyer_phone=phone,
                 buyer_address=address,
                 total=total,
-                status="접수",
+                status="입금대기" if payment.mode == "bank" else "접수",
                 payment_mode=payment.mode,
             )
             db.session.add(order)

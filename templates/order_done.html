@@ -12,8 +12,9 @@
     <p><strong>{{ order.buyer_name }}</strong> 님</p>
     <p>{{ order.buyer_phone }}</p>
     <p>{{ order.buyer_address }}</p>
-    <p>상태: {{ order.status }}</p>
+    <p>상태: {{ order.status }} (입금 확인 전)</p>
     <p class="done-total">입금할 금액 {{ order.total | krw }}</p>
+    <p class="muted">입금자명을 <strong>{{ order.buyer_name }}</strong> 님 성함과 같게 적어 주세요.</p>
   </div>
   {% include "_bank_info.html" %}
 

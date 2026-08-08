@@ -152,7 +152,9 @@ def dashboard():
     products = Product.query.order_by(Product.id.desc()).all()
     orders = Order.query.order_by(Order.created_at.desc()).limit(8).all()
     low_stock = Product.query.filter(Product.stock <= 5, Product.is_active.is_(True)).count()
-    pending_orders = Order.query.filter_by(status="접수").count()
+    pending_orders = Order.query.filter(
+        Order.status.in_(("입금대기", "접수", "입금확인"))
+    ).count()
     unread_inquiries = Inquiry.query.filter_by(is_read=False).count()
     return render_template(
         "admin/dashboard.html",
@@ -229,6 +231,12 @@ def product_delete(product_id: int):
 def orders():
     items = Order.query.order_by(Order.created_at.desc()).all()
     return render_template("admin/orders.html", orders=items, statuses=ORDER_STATUSES)
+
+
+@admin_bp.route("/ops")
+@admin_required
+def ops():
+    return render_template("admin/ops.html")
 
 
 @admin_bp.route("/marketing")

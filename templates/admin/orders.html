@@ -5,27 +5,31 @@
 {% block content %}
 <div class="section-head">
   <h2>주문 관리</h2>
-  <p>상태를 바꾸면 손님의 '내 주문'에도 반영됩니다.</p>
+  <p>추천 순서: <strong>입금대기</strong> → 통장 확인 후 <strong>입금확인</strong> → 포장 후 <strong>배송준비/배송중</strong> → <strong>완료</strong></p>
 </div>
 
 {% for order in orders %}
-  <article class="order-block">
+  <article class="order-block {% if order.status in ['입금대기', '접수'] %}is-new{% endif %}">
     <div class="order-head">
       <h3>주문 #{{ order.id }} · {{ order.buyer_name }}</h3>
       <span class="status-pill">{{ order.status }}</span>
     </div>
     <p class="muted">{{ order.created_at.strftime('%Y-%m-%d %H:%M') }} · {{ order.total | krw }} · {{ order.payment_mode }}</p>
-    <p>{{ order.buyer_phone }} / {{ order.buyer_address }}</p>
+    <p><strong>연락처</strong> {{ order.buyer_phone }}</p>
+    <p><strong>주소</strong> {{ order.buyer_address }}</p>
     <ul class="order-items">
       {% for item in order.items %}
         <li>{{ item.product_name }} ({{ item.size }}) × {{ item.qty }} — {{ item.line_total | krw }}</li>
       {% endfor %}
     </ul>
+    {% if order.status in ['입금대기', '접수'] %}
+      <p class="admin-hint">입금자명이 주문자 이름과 같은지 통장에서 확인하세요. 금액 {{ order.total | krw }}</p>
+    {% endif %}
     <form class="status-form" method="post" action="{{ url_for('admin.order_status', order_id=order.id) }}">
       <label>
         상태 변경
         <select name="status">
-          {% for s in statuses %}
+          {% for s in statuses if s != '접수' or order.status == '접수' %}
             <option value="{{ s }}" {% if order.status == s %}selected{% endif %}>{{ s }}</option>
           {% endfor %}
         </select>
@@ -34,6 +38,6 @@
     </form>
   </article>
 {% else %}
-  <p class="empty">아직 주문이 없어요. 손님 계정으로 쇼핑몰에서 연습 주문을 해보세요.</p>
+  <p class="empty">아직 주문이 없어요. 쇼핑몰에서 테스트 주문을 한 번 해보세요.</p>
 {% endfor %}
 {% endblock %}
