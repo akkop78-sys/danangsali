@@ -7,10 +7,11 @@ SAMPLE_PRODUCTS = [
         "price": 30000,
         "stock": 50,
         "category": "세트",
-        "color": "믹스",
-        "description": "다낭에서 고른 보석팬티 10개 세트. 데일리로 돌려 입기 좋은 구성입니다.",
+        "color": "누드/베이지",
+        "description": "다낭에서 고른 보석팬티 10개 세트. 반짝이는 포인트와 부드러운 착용감으로 데일리·선물용으로 인기입니다.",
         "sizes": "FREE",
-        "image_url": "https://images.unsplash.com/photo-1562157873-818bc0726f68?auto=format&fit=crop&w=900&q=80",
+        "image_url": "",
+        "image_path": "uploads/jewel-panty-set.jpg",
         "channel_note": "보석팬티",
     },
     {
@@ -19,21 +20,28 @@ SAMPLE_PRODUCTS = [
         "price": 35000,
         "stock": 50,
         "category": "세트",
-        "color": "믹스",
-        "description": "다낭에서 고른 질러팬티 10개 세트. 착용감 좋은 구성으로 구성했습니다.",
+        "color": "누드/아이보리/핑크",
+        "description": "다낭 한시장에서 유명한 질러팬티 10개 세트. 심리스에 가까운 편안한 착용감으로 매일 입기 좋습니다.",
         "sizes": "FREE",
-        "image_url": "https://images.unsplash.com/photo-1558171813-4c088753af8f?auto=format&fit=crop&w=900&q=80",
+        "image_url": "",
+        "image_path": "uploads/jiller-panty-set.jpg",
         "channel_note": "질러팬티",
     },
 ]
+
+CATALOG_VERSION = "jewel-jiller-v2"
 
 
 def _needs_catalog_refresh() -> bool:
     if Product.query.count() != len(SAMPLE_PRODUCTS):
         return True
-    slugs = {p.slug for p in Product.query.all()}
-    expected = {item["slug"] for item in SAMPLE_PRODUCTS}
-    return slugs != expected
+    for item in SAMPLE_PRODUCTS:
+        p = Product.query.filter_by(slug=item["slug"]).first()
+        if not p:
+            return True
+        if p.image_path != item.get("image_path", "") or p.price != item["price"]:
+            return True
+    return False
 
 
 def _refresh_catalog() -> None:

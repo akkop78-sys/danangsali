@@ -7,5 +7,7 @@ venv/
 tools/
 static/uploads/*
 !static/uploads/.gitkeep
+!static/uploads/jewel-panty-set.jpg
+!static/uploads/jiller-panty-set.jpg
 .DS_Store
 *.log
