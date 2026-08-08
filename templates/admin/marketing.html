@@ -5,8 +5,24 @@
 {% block content %}
 <div class="section-head">
   <h2>마케팅 복붙 문구</h2>
-  <p>네이버 블로그·카페·단톡에 그대로 복사해 쓰세요. 링크는 사이트 주소로 바꿔 넣으면 됩니다.</p>
+  <p>네이버 계정은 직접 로그인하셔야 해서, 글은 여기 다 준비해 두었습니다. <strong>복사 → 네이버에 붙여넣기</strong>만 하시면 됩니다.</p>
 </div>
+
+<p class="admin-hint">
+  빠른 링크:
+  <a href="https://blog.naver.com/" target="_blank" rel="noopener">네이버 블로그 열기</a>
+  ·
+  <a href="https://section.cafe.naver.com/" target="_blank" rel="noopener">네이버 카페 열기</a>
+</p>
+
+<p>
+  텍스트 파일 다운로드:
+  <a href="{{ url_for('static', filename='marketing/blog-danang-panty.txt') }}" download>블로그글.txt</a>
+  ·
+  <a href="{{ url_for('static', filename='marketing/cafe-danang-panty.txt') }}" download>카페글.txt</a>
+  ·
+  <a href="{{ url_for('static', filename='marketing/short-sns.txt') }}" download>짧은문구.txt</a>
+</p>
 
 {% for post in posts %}
   <article class="order-block">
@@ -14,12 +30,35 @@
     <p class="muted">추천 채널: {{ post.channel }}</p>
     <label>
       제목
-      <input type="text" readonly value="{{ post.title }}" onclick="this.select()" />
+      <input type="text" id="title-{{ loop.index }}" readonly value="{{ post.title }}" />
     </label>
+    <button class="btn btn-secondary" type="button" data-copy="title-{{ loop.index }}">제목 복사</button>
     <label>
-      본문 (클릭 후 Ctrl+A → 복사)
-      <textarea rows="12" readonly onclick="this.select()">{{ post.body }}</textarea>
+      본문
+      <textarea id="body-{{ loop.index }}" rows="12" readonly>{{ post.body }}</textarea>
     </label>
+    <button class="btn btn-primary" type="button" data-copy="body-{{ loop.index }}">본문 복사</button>
   </article>
 {% endfor %}
+
+<script>
+document.querySelectorAll("[data-copy]").forEach((btn) => {
+  btn.addEventListener("click", async () => {
+    const el = document.getElementById(btn.getAttribute("data-copy"));
+    if (!el) return;
+    const text = el.value || el.textContent || "";
+    try {
+      await navigator.clipboard.writeText(text);
+      btn.textContent = "복사됨!";
+      setTimeout(() => {
+        btn.textContent = btn.getAttribute("data-copy").startsWith("title") ? "제목 복사" : "본문 복사";
+      }, 1200);
+    } catch (e) {
+      el.focus();
+      el.select();
+      alert("복사 버튼을 쓸 수 없으면 Ctrl+C 로 복사해 주세요.");
+    }
+  });
+});
+</script>
 {% endblock %}
