@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}관리자 — {{ shop_name }}{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body class="admin-body">
+  <div class="page-bg" aria-hidden="true"></div>
+  <header class="admin-header">
+    <a class="brand" href="{{ url_for('admin.dashboard') }}">{{ shop_name }} 관리</a>
+    <nav class="admin-nav">
+      <a href="{{ url_for('admin.dashboard') }}">홈</a>
+      <a href="{{ url_for('admin.products') }}">상품</a>
+      <a href="{{ url_for('admin.orders') }}">주문</a>
+      <a href="{{ url_for('admin.export_page') }}">마켓 내보내기</a>
+      <a href="{{ url_for('admin.guide') }}">따라하기</a>
+      <a href="{{ url_for('admin.change_password') }}">비밀번호</a>
+      <a href="{{ url_for('index') }}">쇼핑몰 보기</a>
+      <a href="{{ url_for('admin.logout') }}">로그아웃</a>
+    </nav>
+  </header>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-wrap">
+        {% for category, message in messages %}
+          <p class="flash flash-{{ category }}">{{ message }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <main class="admin-main">
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

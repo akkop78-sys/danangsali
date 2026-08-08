@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}내 주문 — {{ shop_name }}{% endblock %}
+
+{% block content %}
+<section class="cart-page">
+  <div class="section-head">
+    <h2>내 주문</h2>
+    <p>지금까지 주문하신 내역입니다.</p>
+  </div>
+
+  {% if orders %}
+    <div class="cart-list">
+      {% for order in orders %}
+        <article class="order-block">
+          <div class="order-head">
+            <h3>주문 #{{ order.id }}</h3>
+            <span class="status-pill">{{ order.status }}</span>
+          </div>
+          <p class="muted">{{ order.created_at.strftime('%Y-%m-%d %H:%M') }} · {{ order.total | krw }}</p>
+          <ul class="order-items">
+            {% for item in order.items %}
+              <li>{{ item.product_name }} ({{ item.size }}) × {{ item.qty }} — {{ item.line_total | krw }}</li>
+            {% endfor %}
+          </ul>
+          <p class="muted">배송지: {{ order.buyer_address }}</p>
+        </article>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="empty">아직 주문이 없어요.</p>
+    <a class="btn btn-primary" href="{{ url_for('index') }}#collection">쇼핑하러 가기</a>
+  {% endif %}
+</section>
+{% endblock %}

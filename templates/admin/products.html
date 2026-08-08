@@ -1,0 +1,52 @@
+{% extends "admin/base_admin.html" %}
+
+{% block title %}상품 관리 — {{ shop_name }}{% endblock %}
+
+{% block content %}
+<div class="section-head row-between">
+  <div>
+    <h2>상품 관리</h2>
+    <p>가지고 있는 다낭팬티·속옷을 여기에 등록하세요.</p>
+  </div>
+  <a class="btn btn-primary" href="{{ url_for('admin.product_new') }}">상품 추가</a>
+</div>
+
+<table class="admin-table">
+  <thead>
+    <tr>
+      <th>이미지</th>
+      <th>상품명</th>
+      <th>가격</th>
+      <th>재고</th>
+      <th>카테고리</th>
+      <th>판매</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for p in products %}
+      <tr>
+        <td class="thumb-cell">
+          <img src="{{ product_image(p) }}" alt="" />
+        </td>
+        <td>
+          <strong>{{ p.name }}</strong>
+          <div class="muted">{{ p.slug }}</div>
+        </td>
+        <td>{{ p.price | krw }}</td>
+        <td>{{ p.stock }}</td>
+        <td>{{ p.category }}</td>
+        <td>{% if p.is_active %}판매중{% else %}숨김{% endif %}</td>
+        <td class="actions-cell">
+          <a href="{{ url_for('admin.product_edit', product_id=p.id) }}">수정</a>
+          <form method="post" action="{{ url_for('admin.product_delete', product_id=p.id) }}" onsubmit="return confirm('정말 삭제할까요?');">
+            <button type="submit" class="linkish">삭제</button>
+          </form>
+        </td>
+      </tr>
+    {% else %}
+      <tr><td colspan="7">등록된 상품이 없어요.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

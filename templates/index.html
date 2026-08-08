@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}{{ shop_name }} — 다낭팬티 후기 모음{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="hero-media" style="background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=2000&q=80')"></div>
+  <div class="hero-veil"></div>
+  <div class="hero-content">
+    <h1 class="hero-brand reveal">{{ shop_name }}</h1>
+    <p class="hero-line reveal delay-1">주재원 10년, 만족한 것만 저렴하게</p>
+    <p class="hero-sub reveal delay-2">베트남에서 일하며 직접 써 본 다낭팬티. 후기를 읽고, 부담 없이 주문하세요.</p>
+    <div class="hero-actions reveal delay-3">
+      <a class="btn btn-primary" href="#reviews">후기 읽기</a>
+      <a class="btn btn-ghost" href="#seller">판매자 이야기</a>
+    </div>
+  </div>
+</section>
+
+<section id="seller" class="seller-band">
+  <div class="seller-inner reveal">
+    <p class="seller-label">다낭살이를 하는 이유</p>
+    <h2>베트남 주재원으로 일한 지<br />10년이 넘었습니다</h2>
+    <p>
+      오래 살다 보니 ‘진짜 괜찮은데 가격은 착한’ 물건이 눈에 들어옵니다.
+      그중에서도 사람들이 후기로 찾는 <strong>다낭팬티</strong>를, 현지에서 골라
+      <strong>만족스러운 상품만 저렴하게</strong> 판매할 예정입니다.
+    </p>
+    <p>
+      여행으로 잠깐 사서 오는 것과 달리, 일상에서 입고 비교해 본 기준으로
+      골랐어요. 화려한 광고보다, 오래 살아 본 사람의 선택을 믿어 주세요.
+    </p>
+  </div>
+</section>
+
+<section class="quotes-strip" aria-label="짧은 후기">
+  <div class="quotes-track">
+    {% for q in quick_quotes %}
+      <figure class="quote-chip reveal">
+        <blockquote>“{{ q.text }}”</blockquote>
+        <figcaption>{{ q.label }}</figcaption>
+      </figure>
+    {% endfor %}
+  </div>
+</section>
+
+<section id="reviews" class="reviews-band">
+  <div class="section-head reveal">
+    <h2>다낭팬티 후기 모음</h2>
+    <p>
+      한시장·착용·선물 후기에서 자주 보이는 이야기입니다.
+      주재원 10년 경험으로 고른 상품과 함께 읽어 보세요. (커뮤니티·블로그 반응 재구성)
+    </p>
+  </div>
+
+  <div class="review-feed">
+    {% for review in featured_reviews %}
+      <article class="review-post reveal {% if loop.index0 == 0 %}is-feature{% endif %}" id="{{ review.id }}">
+        <p class="review-tag">{{ review.tag }}</p>
+        <h3>{{ review.title }}</h3>
+        <p class="review-summary">{{ review.summary }}</p>
+        <p class="review-body">{{ review.body }}</p>
+        <p class="review-source">{{ review.source_note }}</p>
+      </article>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="review-points">
+  <div class="section-head reveal">
+    <h2>후기에서 반복되는 포인트</h2>
+    <p>글마다 표현은 달라도, 아래 말이 거의 항상 나옵니다.</p>
+  </div>
+  <ul class="point-row">
+    <li class="reveal"><strong>심리스</strong><span>라인 덜 탐 · 끼임 적음</span></li>
+    <li class="reveal delay-1"><strong>가성비</strong><span>현지 가격 · 퀄리티 놀람</span></li>
+    <li class="reveal delay-2"><strong>재구매</strong><span>더 사올걸 · 세트 추가</span></li>
+    <li class="reveal delay-3"><strong>데일리</strong><span>기념품 → 매일 착용</span></li>
+  </ul>
+</section>
+
+<section id="collection" class="collection">
+  <div class="section-head">
+    <h2>후기 읽고 고르기</h2>
+    <p>만족스러운 것만, 저렴하게. 현지에서 검수 후 보내 드립니다.</p>
+  </div>
+
+  <div class="filter-row" role="tablist">
+    {% for cat in categories %}
+      <a
+        href="{{ url_for('index', category=cat) }}#collection"
+        class="filter-link {% if active_category == cat %}is-active{% endif %}"
+      >{{ cat }}</a>
+    {% endfor %}
+  </div>
+
+  <div class="product-grid">
+    {% for product in products %}
+      <article class="product reveal">
+        <a class="product-media" href="{{ url_for('product_detail', slug=product.slug) }}">
+          <img src="{{ product_image(product) }}" alt="{{ product.name }}" loading="lazy" />
+        </a>
+        <div class="product-meta">
+          <p class="product-cat">{{ product.category }} · {{ product.color }}</p>
+          <h3><a href="{{ url_for('product_detail', slug=product.slug) }}">{{ product.name }}</a></h3>
+          <p class="product-price">{{ product.price | krw }}</p>
+        </div>
+      </article>
+    {% else %}
+      <p class="empty">이 카테고리에는 아직 상품이 없어요.</p>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="order-cta">
+  <div class="order-cta-inner reveal">
+    <h2>{{ shop_name }}</h2>
+    <p>주재원 10년, 직접 고른 다낭팬티를 부담 없는 가격으로.</p>
+    <a class="btn btn-primary" href="#collection">주문하러 가기</a>
+  </div>
+</section>
+{% endblock %}

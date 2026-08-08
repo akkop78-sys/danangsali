@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}로그인 — {{ shop_name }}{% endblock %}
+
+{% block content %}
+<section class="auth-page">
+  <div class="section-head">
+    <h2>로그인</h2>
+    <p>회원으로 주문하고 내역을 확인하세요.</p>
+  </div>
+  <form class="auth-form" method="post">
+    <label>
+      이메일
+      <input type="email" name="email" required placeholder="you@email.com" />
+    </label>
+    <label>
+      비밀번호
+      <input type="password" name="password" required />
+    </label>
+    <button class="btn btn-primary" type="submit">로그인</button>
+  </form>
+  <p class="auth-switch">아직 회원이 아니신가요? <a href="{{ url_for('register') }}">회원가입</a></p>
+</section>
+{% endblock %}

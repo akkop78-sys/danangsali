@@ -1,0 +1,68 @@
+{% extends "admin/base_admin.html" %}
+
+{% block title %}따라하기 — {{ shop_name }}{% endblock %}
+
+{% block content %}
+<div class="section-head">
+  <h2>네이버·쿠팡 따라하기</h2>
+  <p>완전히 초보 기준으로 적어 두었어요. 위에서부터 천천히 하세요.</p>
+</div>
+
+<article class="guide-step">
+  <h3>0. 먼저 알아둘 것</h3>
+  <ul>
+    <li>네이버·쿠팡에 물건을 팔려면 보통 <strong>사업자등록</strong>이 필요합니다. (통신판매업 신고도 함께 안내됩니다.)</li>
+    <li>홈택스에서 사업자등록을 하거나, 세무서/인터넷으로 신청할 수 있어요.</li>
+    <li>이 프로그램은 계정 없이도 CSV 파일을 만들어 줍니다. 계정 가입 후 그 파일을 올리면 됩니다.</li>
+  </ul>
+</article>
+
+<article class="guide-step">
+  <h3>1. 다낭살이에 내 물건 등록</h3>
+  <ol>
+    <li><a href="{{ url_for('admin.products') }}">상품 관리</a>에서 내 옷을 등록합니다. (사진, 가격, 재고, 사이즈)</li>
+    <li>등록이 끝나면 <a href="{{ url_for('admin.export_page') }}">마켓 내보내기</a>에서 CSV를 받습니다.</li>
+  </ol>
+</article>
+
+<article class="guide-step">
+  <h3>2. 네이버 스마트스토어에 올리기</h3>
+  <ol>
+    <li><a href="https://sell.smartstore.naver.com" target="_blank" rel="noopener">스마트스토어 센터</a>에 가입합니다.</li>
+    <li>판매자 정보·정산 계좌·사업자 정보를 입력합니다.</li>
+    <li>상품 &gt; 상품 등록 / 대량등록 메뉴로 갑니다.</li>
+    <li>네이버가 제공하는 <strong>공식 엑셀(또는 CSV) 양식</strong>을 다운로드합니다.</li>
+    <li>다낭살이에서 받은 <code>tokkiyasa_naver.csv</code>를 엑셀로 엽니다.</li>
+    <li>상품명, 판매가, 재고, 설명, 이미지, 옵션(사이즈) 값을 공식 양식의 같은 의미 칸에 복사합니다.</li>
+    <li>공식 양식을 스마트스토어에 업로드합니다.</li>
+  </ol>
+</article>
+
+<article class="guide-step">
+  <h3>3. 쿠팡에 올리기</h3>
+  <ol>
+    <li><a href="https://wing.coupang.com" target="_blank" rel="noopener">쿠팡 윙</a>에 판매자 가입합니다.</li>
+    <li>판매자 승인·카테고리·출고지 설정을 마칩니다.</li>
+    <li>상품 대량등록(또는 엑셀 등록) 메뉴에서 공식 양식을 받습니다.</li>
+    <li>다낭살이 <code>tokkiyasa_coupang.csv</code>의 내용을 공식 양식에 복사합니다.</li>
+    <li>업로드 후 승인/노출 상태를 확인합니다.</li>
+  </ol>
+</article>
+
+<article class="guide-step">
+  <h3>4. 양식이 바뀌었을 때</h3>
+  <p>
+    네이버·쿠팡은 가끔 열 이름을 바꿉니다. 그때는 공식 양식을 새로 받은 뒤,
+    다낭살이 CSV의 값을 “이름만 비슷한 열”에 옮겨 붙이면 됩니다.
+    상품 데이터 원본은 항상 다낭살이 관리자에 두면 두 채널에 다시 내보내기 쉽습니다.
+  </p>
+</article>
+
+<article class="guide-step">
+  <h3>5. 나중에 자동 연동하려면</h3>
+  <p>
+    스마트스토어 API / 쿠팡 Open API 키가 생기면, 그때 자동 업로드를 붙일 수 있습니다.
+    지금은 초보에게 가장 안전한 방법인 <strong>파일 내보내기 + 공식 업로드</strong>를 씁니다.
+  </p>
+</article>
+{% endblock %}

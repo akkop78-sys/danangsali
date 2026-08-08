@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}장바구니 — {{ shop_name }}{% endblock %}
+
+{% block content %}
+<section class="cart-page">
+  <div class="section-head">
+    <h2>장바구니</h2>
+    <p>담아두신 상품을 확인하고 주문해 보세요.</p>
+  </div>
+
+  {% if items %}
+    <div class="cart-list">
+      {% for item in items %}
+        <article class="cart-item">
+          <a class="cart-thumb" href="{{ url_for('product_detail', slug=item.product.slug) }}">
+            <img src="{{ product_image(item.product) }}" alt="{{ item.product.name }}" />
+          </a>
+          <div class="cart-body">
+            <h3>{{ item.product.name }}</h3>
+            <p>사이즈 {{ item.size }} · {{ item.product.price | krw }}</p>
+            <div class="qty-row">
+              <form method="post" action="{{ url_for('cart_update') }}">
+                <input type="hidden" name="product_id" value="{{ item.product_id }}" />
+                <input type="hidden" name="size" value="{{ item.size }}" />
+                <button name="action" value="dec" type="submit" aria-label="수량 감소">−</button>
+              </form>
+              <span>{{ item.qty }}</span>
+              <form method="post" action="{{ url_for('cart_update') }}">
+                <input type="hidden" name="product_id" value="{{ item.product_id }}" />
+                <input type="hidden" name="size" value="{{ item.size }}" />
+                <button name="action" value="inc" type="submit" aria-label="수량 증가">+</button>
+              </form>
+              <form method="post" action="{{ url_for('cart_update') }}" class="remove-form">
+                <input type="hidden" name="product_id" value="{{ item.product_id }}" />
+                <input type="hidden" name="size" value="{{ item.size }}" />
+                <button name="action" value="remove" type="submit">삭제</button>
+              </form>
+            </div>
+          </div>
+          <p class="cart-line">{{ item.line_total | krw }}</p>
+        </article>
+      {% endfor %}
+    </div>
+
+    <div class="cart-summary">
+      <p>합계 <strong>{{ total | krw }}</strong></p>
+      <a class="btn btn-primary" href="{{ url_for('checkout') }}">주문하기</a>
+    </div>
+  {% else %}
+    <p class="empty">장바구니가 비어 있어요.</p>
+    <a class="btn btn-primary" href="{{ url_for('index') }}#collection">쇼핑하러 가기</a>
+  {% endif %}
+</section>
+{% endblock %}

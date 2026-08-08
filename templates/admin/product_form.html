@@ -1,0 +1,78 @@
+{% extends "admin/base_admin.html" %}
+
+{% block title %}{% if product %}상품 수정{% else %}상품 추가{% endif %} — {{ shop_name }}{% endblock %}
+
+{% block content %}
+<div class="section-head">
+  <h2>{% if product %}상품 수정{% else %}상품 추가{% endif %}</h2>
+  <p>사진과 가격, 재고만 정확히 넣으면 됩니다.</p>
+</div>
+
+<form class="admin-form" method="post" enctype="multipart/form-data">
+  <label>
+    상품명 *
+    <input type="text" name="name" required value="{{ product.name if product else '' }}" />
+  </label>
+  <label>
+    상품코드 (비우면 자동)
+    <input type="text" name="slug" value="{{ product.slug if product else '' }}" placeholder="soft-tee" />
+  </label>
+  <div class="form-row">
+    <label>
+      판매가(원) *
+      <input type="number" name="price" min="0" required value="{{ product.price if product else '' }}" />
+    </label>
+    <label>
+      재고 *
+      <input type="number" name="stock" min="0" required value="{{ product.stock if product else 0 }}" />
+    </label>
+  </div>
+  <div class="form-row">
+    <label>
+      카테고리
+      <select name="category">
+        {% for c in categories %}
+          <option value="{{ c }}" {% if product and product.category == c %}selected{% endif %}>{{ c }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>
+      색상
+      <input type="text" name="color" value="{{ product.color if product else '' }}" />
+    </label>
+  </div>
+  <label>
+    사이즈 (쉼표로 구분)
+    <input type="text" name="sizes" value="{{ product.sizes if product else 'S,M,L' }}" placeholder="S,M,L,XL 또는 FREE" />
+  </label>
+  <label>
+    상품 설명
+    <textarea name="description" rows="4">{{ product.description if product else '' }}</textarea>
+  </label>
+  <label>
+    이미지 URL (인터넷 주소)
+    <input type="url" name="image_url" value="{{ product.image_url if product else '' }}" placeholder="https://..." />
+  </label>
+  <label>
+    또는 사진 파일 업로드
+    <input type="file" name="image_file" accept="image/*" />
+  </label>
+  {% if product and (product.image_path or product.image_url) %}
+    <div class="form-preview">
+      <img src="{{ product_image(product) }}" alt="미리보기" />
+    </div>
+  {% endif %}
+  <label>
+    판매채널 메모 (네이버/쿠팡용 메모)
+    <input type="text" name="channel_note" value="{{ product.channel_note if product else '' }}" />
+  </label>
+  <label class="check-label">
+    <input type="checkbox" name="is_active" {% if not product or product.is_active %}checked{% endif %} />
+    쇼핑몰에 판매 표시
+  </label>
+  <div class="admin-actions">
+    <button class="btn btn-primary" type="submit">저장</button>
+    <a class="btn btn-secondary" href="{{ url_for('admin.products') }}">취소</a>
+  </div>
+</form>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}주문 완료 — {{ shop_name }}{% endblock %}
+
+{% block content %}
+<section class="done-page">
+  <p class="done-eyebrow">Thank you</p>
+  <h1>{{ shop_name }}</h1>
+  <p class="done-msg">주문이 접수되었어요. 곧 배송 준비를 시작할 거예요.</p>
+  <div class="done-box">
+    <p>주문번호 <strong>#{{ order.id }}</strong></p>
+    <p><strong>{{ order.buyer_name }}</strong> 님</p>
+    <p>{{ order.buyer_phone }}</p>
+    <p>{{ order.buyer_address }}</p>
+    <p>상태: {{ order.status }}</p>
+    <p class="done-total">금액 {{ order.total | krw }} ({{ order.payment_mode }})</p>
+  </div>
+  <div class="hero-actions" style="justify-content:center">
+    <a class="btn btn-primary" href="{{ url_for('my_orders') }}">내 주문 보기</a>
+    <a class="btn btn-primary" href="{{ url_for('index') }}">쇼핑 계속하기</a>
+  </div>
+</section>
+{% endblock %}

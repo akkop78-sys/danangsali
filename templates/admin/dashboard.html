@@ -1,0 +1,62 @@
+{% extends "admin/base_admin.html" %}
+
+{% block title %}관리자 홈 — {{ shop_name }}{% endblock %}
+
+{% block content %}
+<div class="section-head">
+  <h2>관리자 홈</h2>
+  <p>다낭팬티를 등록하고, 주문을 처리하고, 네이버·쿠팡에 올릴 파일을 받으세요.</p>
+</div>
+
+<div class="stat-row">
+  <div class="stat"><strong>{{ product_count }}</strong><span>등록 상품</span></div>
+  <div class="stat"><strong>{{ order_count }}</strong><span>전체 주문</span></div>
+  <div class="stat"><strong>{{ low_stock }}</strong><span>재고 5개 이하</span></div>
+</div>
+
+<div class="admin-actions">
+  <a class="btn btn-primary" href="{{ url_for('admin.product_new') }}">상품 추가</a>
+  <a class="btn btn-secondary" href="{{ url_for('admin.export_page') }}">마켓 CSV 받기</a>
+  <a class="btn btn-secondary" href="{{ url_for('admin.guide') }}">네이버·쿠팡 따라하기</a>
+</div>
+
+<div class="admin-two">
+  <section>
+    <h3>최근 주문</h3>
+    {% if orders %}
+      <table class="admin-table">
+        <thead>
+          <tr><th>번호</th><th>주문자</th><th>금액</th><th>상태</th></tr>
+        </thead>
+        <tbody>
+          {% for order in orders %}
+            <tr>
+              <td>#{{ order.id }}</td>
+              <td>{{ order.buyer_name }}</td>
+              <td>{{ order.total | krw }}</td>
+              <td>{{ order.status }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <p><a href="{{ url_for('admin.orders') }}">전체 주문 보기 →</a></p>
+    {% else %}
+      <p class="empty">아직 주문이 없어요.</p>
+    {% endif %}
+  </section>
+
+  <section>
+    <h3>상품 미리보기</h3>
+    {% if products %}
+      <ul class="plain-list">
+        {% for p in products[:6] %}
+          <li>{{ p.name }} · 재고 {{ p.stock }} · {{ p.price | krw }}</li>
+        {% endfor %}
+      </ul>
+      <p><a href="{{ url_for('admin.products') }}">상품 관리 →</a></p>
+    {% else %}
+      <p class="empty">상품을 추가해 주세요.</p>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

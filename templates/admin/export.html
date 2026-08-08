@@ -1,0 +1,29 @@
+{% extends "admin/base_admin.html" %}
+
+{% block title %}마켓 내보내기 — {{ shop_name }}{% endblock %}
+
+{% block content %}
+<div class="section-head">
+  <h2>마켓 내보내기</h2>
+  <p>판매중 상품 {{ product_count }}개를 네이버·쿠팡용 CSV로 받을 수 있어요.</p>
+</div>
+
+<div class="export-cards">
+  <article class="export-card">
+    <h3>네이버 스마트스토어</h3>
+    <p>대량등록 화면에 맞춰 옮기기 쉬운 CSV입니다.</p>
+    <a class="btn btn-primary" href="{{ url_for('admin.export_naver') }}">네이버용 CSV 다운로드</a>
+  </article>
+  <article class="export-card">
+    <h3>쿠팡 윙</h3>
+    <p>상품 대량등록 양식에 복사하기 쉬운 CSV입니다.</p>
+    <a class="btn btn-primary" href="{{ url_for('admin.export_coupang') }}">쿠팡용 CSV 다운로드</a>
+  </article>
+</div>
+
+<p class="hint-box">
+  공식 양식 열이 바뀌어도 괜찮아요. 받은 CSV를 엑셀로 열고,
+  스마트스토어/쿠팡에서 받은 <strong>공식 양식</strong>에 같은 이름 열로 복사하면 됩니다.
+  자세한 순서는 <a href="{{ url_for('admin.guide') }}">따라하기</a>를 보세요.
+</p>
+{% endblock %}

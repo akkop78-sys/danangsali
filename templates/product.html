@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }} — {{ shop_name }}{% endblock %}
+
+{% block content %}
+<section class="detail">
+  <div class="detail-media reveal">
+    <img src="{{ product_image(product) }}" alt="{{ product.name }}" />
+  </div>
+  <div class="detail-info reveal delay-1">
+    <p class="product-cat">{{ product.category }} · {{ product.color }}</p>
+    <h1>{{ product.name }}</h1>
+    <p class="detail-price">{{ product.price | krw }}</p>
+    <p class="detail-desc">{{ product.description }}</p>
+    <p class="stock-note">재고 {{ product.stock }}개 · 다낭 현지 검수 후 발송</p>
+
+    <form class="buy-form" method="post" action="{{ url_for('cart_add') }}">
+      <input type="hidden" name="product_id" value="{{ product.id }}" />
+      <label>
+        사이즈
+        <select name="size" required>
+          {% for size in product.size_list() %}
+            <option value="{{ size }}">{{ size }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label>
+        수량
+        <input type="number" name="qty" value="1" min="1" max="10" />
+      </label>
+      <button class="btn btn-primary" type="submit" {% if product.stock < 1 %}disabled{% endif %}>
+        {% if product.stock < 1 %}품절{% else %}장바구니 담기{% endif %}
+      </button>
+    </form>
+
+    <ul class="detail-trust">
+      <li>베트남 주재원 10년+, 직접 써 보고 만족한 상품만 골랐어요.</li>
+      <li>현지에서 상태 확인 후 포장·발송합니다. (일정은 주문 후 안내)</li>
+      <li>사이즈가 고민되면 문의로 말씀해 주세요.</li>
+    </ul>
+  </div>
+</section>
+
+{% if related %}
+<section class="related">
+  <div class="section-head">
+    <h2>함께 보면 좋은 다낭팬티</h2>
+  </div>
+  <div class="product-grid compact">
+    {% for item in related %}
+      <article class="product reveal">
+        <a class="product-media" href="{{ url_for('product_detail', slug=item.slug) }}">
+          <img src="{{ product_image(item) }}" alt="{{ item.name }}" loading="lazy" />
+        </a>
+        <div class="product-meta">
+          <h3><a href="{{ url_for('product_detail', slug=item.slug) }}">{{ item.name }}</a></h3>
+          <p class="product-price">{{ item.price | krw }}</p>
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+{% endblock %}

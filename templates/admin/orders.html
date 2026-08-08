@@ -1,0 +1,39 @@
+{% extends "admin/base_admin.html" %}
+
+{% block title %}주문 관리 — {{ shop_name }}{% endblock %}
+
+{% block content %}
+<div class="section-head">
+  <h2>주문 관리</h2>
+  <p>상태를 바꾸면 손님의 '내 주문'에도 반영됩니다.</p>
+</div>
+
+{% for order in orders %}
+  <article class="order-block">
+    <div class="order-head">
+      <h3>주문 #{{ order.id }} · {{ order.buyer_name }}</h3>
+      <span class="status-pill">{{ order.status }}</span>
+    </div>
+    <p class="muted">{{ order.created_at.strftime('%Y-%m-%d %H:%M') }} · {{ order.total | krw }} · {{ order.payment_mode }}</p>
+    <p>{{ order.buyer_phone }} / {{ order.buyer_address }}</p>
+    <ul class="order-items">
+      {% for item in order.items %}
+        <li>{{ item.product_name }} ({{ item.size }}) × {{ item.qty }} — {{ item.line_total | krw }}</li>
+      {% endfor %}
+    </ul>
+    <form class="status-form" method="post" action="{{ url_for('admin.order_status', order_id=order.id) }}">
+      <label>
+        상태 변경
+        <select name="status">
+          {% for s in statuses %}
+            <option value="{{ s }}" {% if order.status == s %}selected{% endif %}>{{ s }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <button class="btn btn-primary" type="submit">저장</button>
+    </form>
+  </article>
+{% else %}
+  <p class="empty">아직 주문이 없어요. 손님 계정으로 쇼핑몰에서 연습 주문을 해보세요.</p>
+{% endfor %}
+{% endblock %}
