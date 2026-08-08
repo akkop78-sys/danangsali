@@ -581,6 +581,98 @@ img {
   color: var(--ink-soft);
 }
 
+.guides-teaser,
+.guides-page,
+.guide-detail {
+  width: min(860px, 100%);
+  margin: 0 auto;
+  padding: 3rem 1.5rem 2rem;
+}
+
+.guide-list {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+.guide-list.compact {
+  grid-template-columns: 1fr;
+}
+
+.guide-card {
+  padding: 1.1rem 0 0;
+  border-top: 1px solid var(--line);
+}
+
+.guide-card h2,
+.guide-card h3 {
+  margin: 0.2rem 0 0.55rem;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  letter-spacing: 0.03em;
+}
+
+.guide-card h2 a,
+.guide-card h3 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.guide-card p,
+.guide-body p {
+  margin: 0;
+  color: var(--ink-soft);
+  line-height: 1.7;
+}
+
+.guide-eyebrow {
+  margin: 0;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.guide-more,
+.guide-cta {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.text-link {
+  color: var(--ink);
+  text-underline-offset: 3px;
+}
+
+.guide-detail h1 {
+  margin: 0.35rem 0;
+}
+
+.guide-detail .guide-body h2 {
+  margin: 0 0 0.65rem;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+}
+
+.guide-related {
+  margin-top: 2.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line);
+}
+
+.guide-related ul {
+  margin: 0.75rem 0 0;
+  padding-left: 1.1rem;
+  color: var(--ink-soft);
+}
+
+.guide-related a {
+  color: inherit;
+}
+
 .bank-section {
   width: min(720px, 100%);
   margin: 0 auto;

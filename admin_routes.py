@@ -231,6 +231,54 @@ def orders():
     return render_template("admin/orders.html", orders=items, statuses=ORDER_STATUSES)
 
 
+@admin_bp.route("/marketing")
+@admin_required
+def marketing():
+    site = "https://danangsali.onrender.com"
+    posts = [
+        {
+            "channel": "네이버 블로그",
+            "title": "다낭팬티 후기 | 한시장 보석팬티·질러팬티 시세와 구매팁",
+            "body": (
+                "다낭 한시장에서 제일 많이 사는 속옷, 일명 다낭팬티!\n"
+                "보석팬티랑 질러팬티가 대표인데요.\n\n"
+                "여행 중에 사기 귀찮거나, 더 사고 싶은데 짐이 부담이라면\n"
+                "주재원이 현지에서 검수해서 보내는 다낭살이로 주문해 보세요.\n\n"
+                f"▶ 쇼핑몰: {site}\n"
+                f"▶ 가이드: {site}/guides/danang-panty-guide\n"
+                "▶ 결제: 무통장 입금 (입금 확인 후 발송)\n\n"
+                "저는 베트남에서 10년 넘게 일하면서 직접 써 보고\n"
+                "만족한 것만 골라 세트로 보내 드리고 있어요.\n"
+                "후기·시세·세탁법은 가이드에 정리해 두었습니다."
+            ),
+        },
+        {
+            "channel": "네이버 카페 / 여행 단톡",
+            "title": "다낭 한시장 팬티 대신 한국에서 시키는 법",
+            "body": (
+                "다낭 한시장 팬티(보석/질러) 찾으시는 분 공유해요.\n"
+                "현지 시세는 장당 대략 2~3만동대라고 하시는데,\n"
+                "여행 없이 세트(10장)로 받아보고 싶으시면 아래 참고!\n\n"
+                f"{site}\n"
+                "보석팬티 / 질러팬티 10개 세트 · 무통장 입금 · 현지 검수 후 발송\n"
+                "문의는 사이트 고객센터(문자·문의양식)로 남기시면 됩니다.\n"
+                "(광고 아니라 제가 주재원으로 직접 운영하는 작은 샵이에요)"
+            ),
+        },
+        {
+            "channel": "인스타/카톡 상태",
+            "title": "짧은 홍보 문구",
+            "body": (
+                "다낭팬티 찾으시나요?\n"
+                "보석팬티·질러팬티 10개 세트\n"
+                "주재원 검수 · 무통장 입금 · 현지 발송\n"
+                f"{site}"
+            ),
+        },
+    ]
+    return render_template("admin/marketing.html", posts=posts)
+
+
 @admin_bp.route("/inquiries")
 @admin_required
 def inquiries():

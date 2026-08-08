@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
-{% block title %}{{ shop_name }} — 다낭팬티 후기 모음{% endblock %}
+{% block title %}다낭팬티 쇼핑몰 {{ shop_name }} — 보석팬티·질러팬티{% endblock %}
+{% block meta_description %}다낭 한시장 다낭팬티(보석팬티·질러팬티)를 주재원이 검수해 판매합니다. 10개 세트, 무통장 입금, 현지 발송.{% endblock %}
 
 {% block content %}
 <section class="hero">
@@ -110,6 +111,23 @@
       <p class="empty">이 카테고리에는 아직 상품이 없어요.</p>
     {% endfor %}
   </div>
+</section>
+
+<section class="guides-teaser reveal" id="guides">
+  <div class="section-head">
+    <p class="eyebrow">다낭팬티 검색하셨나요?</p>
+    <h2>속옷·한시장 가이드</h2>
+    <p>보석팬티·질러팬티 차이, 시세, 세탁법까지 짧게 정리해 두었어요.</p>
+  </div>
+  <div class="guide-list compact">
+    {% for guide in guides %}
+      <article class="guide-card">
+        <h3><a href="{{ url_for('guide_detail', slug=guide.slug) }}">{{ guide.title }}</a></h3>
+        <p>{{ guide.summary }}</p>
+      </article>
+    {% endfor %}
+  </div>
+  <p class="guide-more"><a class="text-link" href="{{ url_for('guides_index') }}">가이드 전체 보기 →</a></p>
 </section>
 
 <section class="bank-section reveal" id="payment">

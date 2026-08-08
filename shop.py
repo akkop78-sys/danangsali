@@ -14,6 +14,7 @@ from flask import (
 
 from admin_routes import admin_bp
 from config import Config
+from guides import GUIDES, get_guide
 from models import CATEGORIES, Inquiry, Order, OrderItem, Product, User, db
 from notify import notify_new_inquiry, notify_new_order
 from payments import create_payment
@@ -151,7 +152,55 @@ def create_app() -> Flask:
             active_category=category,
             featured_reviews=FEATURED_REVIEWS,
             quick_quotes=QUICK_QUOTES,
+            guides=GUIDES,
         )
+
+    @app.route("/guides")
+    def guides_index():
+        return render_template("guides/index.html", guides=GUIDES)
+
+    @app.route("/guides/<slug>")
+    def guide_detail(slug: str):
+        guide = get_guide(slug)
+        if not guide:
+            flash("가이드를 찾을 수 없어요.", "error")
+            return redirect(url_for("guides_index"))
+        related = [g for g in GUIDES if g["slug"] != slug][:3]
+        return render_template("guides/detail.html", guide=guide, related=related)
+
+    @app.route("/robots.txt")
+    def robots_txt():
+        body = (
+            "User-agent: *\n"
+            "Allow: /\n"
+            f"Sitemap: {request.url_root.rstrip('/')}/sitemap.xml\n"
+        )
+        return app.response_class(body, mimetype="text/plain")
+
+    @app.route("/sitemap.xml")
+    def sitemap_xml():
+        base = request.url_root.rstrip("/")
+        urls = [
+            "/",
+            "/guides",
+            "/contact",
+            "/guides/danang-panty-guide",
+            "/guides/jewel-vs-jiller",
+            "/guides/underwear-buy-tips",
+        ]
+        for product in Product.query.filter_by(is_active=True).all():
+            urls.append(f"/product/{product.slug}")
+        items = "\n".join(
+            f"  <url><loc>{base}{path}</loc><changefreq>weekly</changefreq></url>"
+            for path in urls
+        )
+        xml = (
+            '<?xml version="1.0" encoding="UTF-8"?>\n'
+            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+            f"{items}\n"
+            "</urlset>\n"
+        )
+        return app.response_class(xml, mimetype="application/xml")
 
     @app.route("/product/<slug>")
     def product_detail(slug: str):

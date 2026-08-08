@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}{{ guide.title }} — {{ shop_name }}{% endblock %}
+{% block meta_description %}{{ guide.description }}{% endblock %}
+{% block meta_keywords %}{{ guide.keywords }}{% endblock %}
+
+{% block content %}
+<article class="guide-detail">
+  <header class="section-head">
+    <p class="eyebrow">{{ guide.eyebrow }}</p>
+    <h1>{{ guide.title }}</h1>
+    <p>{{ guide.summary }}</p>
+  </header>
+
+  <div class="guide-body">
+    {% for section in guide.sections %}
+      <section class="story-block">
+        <h2>{{ section.heading }}</h2>
+        <p>{{ section.body }}</p>
+      </section>
+    {% endfor %}
+  </div>
+
+  <div class="guide-cta">
+    {% if guide.get('cta_url') == 'contact' %}
+      <a class="btn btn-primary" href="{{ url_for('contact') }}">{{ guide.cta_label }}</a>
+    {% else %}
+      <a class="btn btn-primary" href="{{ url_for('index') }}#{{ guide.cta_anchor or 'collection' }}">{{ guide.cta_label }}</a>
+    {% endif %}
+    <a class="btn btn-secondary" href="{{ url_for('guides_index') }}">가이드 목록</a>
+  </div>
+
+  <aside class="guide-related">
+    <h3>다른 가이드</h3>
+    <ul>
+      {% for item in related %}
+        <li><a href="{{ url_for('guide_detail', slug=item.slug) }}">{{ item.title }}</a></li>
+      {% endfor %}
+    </ul>
+  </aside>
+</article>
+{% endblock %}
