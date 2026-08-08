@@ -243,19 +243,24 @@ def ops():
 @admin_required
 def marketing():
     site = "https://danangsali.onrender.com"
+    # Render 배포가 늦을 때도 받을 수 있게 GitHub raw URL 사용
+    gh = "https://raw.githubusercontent.com/akkop78-sys/danangsali/main/static/marketing"
     photos = [
         {
             "file": "marketing/01-jewel-panty.jpg",
+            "url": f"{gh}/01-jewel-panty.jpg",
             "label": "사진1 보석팬티",
             "hint": "글 맨 위",
         },
         {
             "file": "marketing/02-jiller-panty.jpg",
+            "url": f"{gh}/02-jiller-panty.jpg",
             "label": "사진2 질러팬티",
             "hint": "중간",
         },
         {
             "file": "marketing/03-han-market.jpg",
+            "url": f"{gh}/03-han-market.jpg",
             "label": "사진3 한시장 실물",
             "hint": "링크 앞",
         },
