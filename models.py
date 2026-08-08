@@ -8,7 +8,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 db = SQLAlchemy()
 
 ORDER_STATUSES = ("접수", "배송준비", "배송중", "완료", "취소")
-CATEGORIES = ["전체", "팬티", "세트", "브라탑"]
+CATEGORIES = ["전체", "세트"]
 
 
 class User(db.Model):
