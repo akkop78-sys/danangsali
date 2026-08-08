@@ -40,7 +40,7 @@ class Config:
     )
 
     ADMIN_USERNAME = os.environ.get("ADMIN_USERNAME", "admin")
-    ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "tokkiyasa123")
+    ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "danangsali123")
     SHOP_NAME = "다낭살이"
 
     # 고객센터 연락처 (사이트에 표시)

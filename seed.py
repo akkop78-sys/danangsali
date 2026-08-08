@@ -156,14 +156,19 @@ def _refresh_catalog() -> None:
 
 
 def seed_database(admin_username: str, admin_password: str) -> None:
-    if not User.query.filter_by(email=f"{admin_username}@tokkiyasa.local").first():
+    email = f"{admin_username}@tokkiyasa.local"
+    admin = User.query.filter_by(email=email).first()
+    if not admin:
         admin = User(
-            email=f"{admin_username}@tokkiyasa.local",
+            email=email,
             name="관리자",
             is_admin=True,
         )
-        admin.set_password(admin_password)
         db.session.add(admin)
+    # 환경변수 ADMIN_PASSWORD와 항상 맞춤 (Render에서 로그인 안 되는 문제 방지)
+    admin.is_admin = True
+    if admin_password:
+        admin.set_password(admin_password)
 
     if _needs_catalog_refresh():
         _refresh_catalog()

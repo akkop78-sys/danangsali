@@ -27,7 +27,7 @@
 |----|-----|
 | `SECRET_KEY` | 아무 긴 비밀번호 문자열 |
 | `ADMIN_USERNAME` | `admin` |
-| `ADMIN_PASSWORD` | 본인만 아는 비밀번호 |
+| `ADMIN_PASSWORD` | 관리자 비밀번호 (기본 안내: `danangsali123`) |
 | `PAYMENT_MODE` | `demo` |
 | `SHOP_PHONE` | 문자 문의용 번호 (화면에 노출 안 함, sms 링크만) |
 | `SHOP_KAKAO` | 카카오톡 ID 또는 오픈채팅 안내 |
