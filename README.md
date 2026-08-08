@@ -4,6 +4,13 @@
 
 지금 결제는 **연습(데모) 주문**입니다. 실제 카드 결제는 되지 않으며, 나중에 토스페이먼츠를 붙일 자리만 준비되어 있습니다.
 
+## 인터넷에서 보기 (배포)
+
+- 코드 저장소: https://github.com/akkop78-sys/danangsali
+- Render에 올리기: https://render.com/deploy?repo=https://github.com/akkop78-sys/danangsali  
+  (가입 후 **Apply** → 몇 분 기다리면 `https://이름.onrender.com` 주소가 생깁니다)
+- 자세한 설명: [DEPLOY.md](DEPLOY.md)
+
 ## 1. 실행 방법 (초보)
 
 1. 이 폴더에서 터미널(명령 프롬프트)을 엽니다.
