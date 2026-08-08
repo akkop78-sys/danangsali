@@ -17,21 +17,27 @@
 
 <section class="order-block">
   <h3>1) 블로그용 사진 다운로드 (3장)</h3>
-  <p class="muted">각 사진을 눌러 저장한 뒤, 네이버 글쓰기에서 사진 버튼을 눌러 넣으세요.</p>
+  <p class="muted">사진이 안 보이면 아래 <strong>다운로드</strong>를 누르세요. (새 탭에서 열리면 저장)</p>
   <div class="marketing-photos">
     {% for photo in photos %}
       <figure>
-        <a href="{{ url_for('static', filename=photo.file) }}" download target="_blank" rel="noopener">
-          <img src="{{ url_for('static', filename=photo.file) }}" alt="{{ photo.label }}" />
+        <a href="{{ photo.url }}" target="_blank" rel="noopener">
+          <img src="{{ photo.url }}" alt="{{ photo.label }}" />
         </a>
         <figcaption>
           <strong>{{ photo.label }}</strong><br />
-          <a href="{{ url_for('static', filename=photo.file) }}" download>다운로드</a>
+          <a href="{{ photo.url }}" target="_blank" rel="noopener">다운로드/열기</a>
           · {{ photo.hint }}
         </figcaption>
       </figure>
     {% endfor %}
   </div>
+  <p class="admin-hint">
+    사진 직접 링크:<br />
+    <a href="{{ photos[0].url }}" target="_blank" rel="noopener">보석팬티</a> ·
+    <a href="{{ photos[1].url }}" target="_blank" rel="noopener">질러팬티</a> ·
+    <a href="{{ photos[2].url }}" target="_blank" rel="noopener">한시장실물</a>
+  </p>
   <ol class="ops-list">
     <li><strong>사진1</strong> 보석팬티 → 글 맨 위</li>
     <li><strong>사진2</strong> 질러팬티 → 중간</li>
