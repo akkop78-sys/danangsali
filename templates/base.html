@@ -21,25 +21,23 @@
   <header class="site-header">
     <a class="brand" href="{{ url_for('index') }}">{{ shop_name }}</a>
     <nav class="nav">
-      <a href="{{ url_for('index') }}#seller">판매자</a>
-      <a href="{{ url_for('index') }}#reviews">후기</a>
-      <a href="{{ url_for('index') }}#collection">다낭팬티</a>
-      <a href="{{ url_for('guides_index') }}">가이드</a>
-      <a href="{{ url_for('index') }}#payment">입금계좌</a>
-      <a href="{{ url_for('contact') }}">고객센터</a>
-      <a href="{{ url_for('cart') }}" class="cart-link">
+      <a class="nav-main" href="{{ url_for('index') }}#collection">상품</a>
+      <a class="nav-main" href="{{ url_for('index') }}#payment">입금</a>
+      <a class="nav-main" href="{{ url_for('contact') }}">문의</a>
+      <a class="nav-extra" href="{{ url_for('index') }}#reviews">후기</a>
+      <a class="nav-extra" href="{{ url_for('guides_index') }}">가이드</a>
+      <a href="{{ url_for('cart') }}" class="cart-link nav-main">
         장바구니
         {% if cart_count %}<span class="cart-badge">{{ cart_count }}</span>{% endif %}
       </a>
       {% if current_user %}
-        <a href="{{ url_for('my_orders') }}">내 주문</a>
+        <a class="nav-extra" href="{{ url_for('my_orders') }}">내 주문</a>
         {% if current_user.is_admin %}
-          <a href="{{ url_for('admin.dashboard') }}">관리자</a>
+          <a class="nav-extra" href="{{ url_for('admin.dashboard') }}">관리자</a>
         {% endif %}
-        <a href="{{ url_for('logout') }}">로그아웃</a>
+        <a class="nav-extra" href="{{ url_for('logout') }}">로그아웃</a>
       {% else %}
-        <a href="{{ url_for('login') }}">로그인</a>
-        <a href="{{ url_for('register') }}">회원가입</a>
+        <a class="nav-extra" href="{{ url_for('login') }}">로그인</a>
       {% endif %}
     </nav>
   </header>
