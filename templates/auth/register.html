@@ -6,7 +6,7 @@
 <section class="auth-page">
   <div class="section-head">
     <h2>회원가입</h2>
-    <p>이름과 이메일만 있으면 바로 가입할 수 있어요.</p>
+    <p>주문만 하시려면 가입 없이 <a href="{{ url_for('index') }}#collection">상품</a>에서 장바구니 → 주문하기 하시면 됩니다.</p>
   </div>
   <form class="auth-form" method="post">
     <label>
@@ -14,7 +14,7 @@
       <input type="text" name="name" required />
     </label>
     <label>
-      이메일
+      이메일 (로그인용)
       <input type="email" name="email" required placeholder="you@email.com" />
     </label>
     <label>
@@ -23,6 +23,6 @@
     </label>
     <button class="btn btn-primary" type="submit">가입하기</button>
   </form>
-  <p class="auth-switch">이미 계정이 있나요? <a href="{{ url_for('login') }}">로그인</a></p>
+  <p class="auth-switch">이미 가입했다면 <a href="{{ url_for('login') }}">로그인</a> · 관리자는 <a href="{{ url_for('admin.login') }}">관리자 로그인</a></p>
 </section>
 {% endblock %}

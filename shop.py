@@ -230,7 +230,10 @@ def create_app() -> Flask:
             elif len(password) < 6:
                 flash("비밀번호는 6자 이상으로 해 주세요.", "error")
             elif User.query.filter_by(email=email).first():
-                flash("이미 가입된 이메일이에요.", "error")
+                flash(
+                    "이미 가입된 이메일이에요. 로그인하시거나, 비회원으로 바로 주문하세요.",
+                    "error",
+                )
             else:
                 user = User(email=email, name=name, is_admin=False)
                 user.set_password(password)
@@ -341,14 +344,16 @@ def create_app() -> Flask:
         return redirect(url_for("cart"))
 
     @app.route("/checkout", methods=["GET", "POST"])
-    @login_required
     def checkout():
+        """회원 가입 없이 주문 가능 (무통장 입금)."""
         cart = get_cart()
         if not cart:
             flash("장바구니가 비어 있어요.", "error")
             return redirect(url_for("index"))
 
-        user = User.query.get(session["user_id"])
+        user = None
+        if session.get("user_id"):
+            user = User.query.get(session["user_id"])
 
         if request.method == "POST":
             name = request.form.get("name", "").strip()
@@ -369,20 +374,21 @@ def create_app() -> Flask:
                     return redirect(url_for("cart"))
 
             total = cart_total()
+            order_key = f"bank-{(user.id if user else 'guest')}-{total}"
             payment = create_payment(
                 amount=total,
-                order_id=f"demo-{user.id}-{total}",
+                order_id=order_key,
                 order_name=f"{app.config['SHOP_NAME']} 주문",
                 customer_name=name,
                 client_key=app.config.get("TOSS_CLIENT_KEY", ""),
-                payment_mode=app.config.get("PAYMENT_MODE", "demo"),
+                payment_mode=app.config.get("PAYMENT_MODE", "bank"),
             )
             if not payment.ok:
                 flash(payment.message, "error")
                 return redirect(url_for("checkout"))
 
             order = Order(
-                user_id=user.id,
+                user_id=user.id if user else None,
                 buyer_name=name,
                 buyer_phone=phone,
                 buyer_address=address,
